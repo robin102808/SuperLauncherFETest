@@ -41,6 +41,7 @@
 3. Could have modularized the script and css files
 4. Could have added some tests 
 5. Could have used TailwindCSS
+6. Could have used the Binance API to get Contract ABIs, instead I used a constant basic abi 
 
 <br>
 
