@@ -39,6 +39,8 @@
 1. Could have used 1 table for both sections
 2. Could have added seperate components for Token and Wallets for displaying 
 3. Could have modularized the script and css files
+4. Could have added some tests 
+5. Could have used TailwindCSS
 
 <br>
 
