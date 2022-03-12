@@ -41,12 +41,16 @@ export default {
         const token_symbol = await contract.methods.symbol().call();
         const token_name = await contract.methods.name().call();
         const token_decimal = await contract.methods.decimals().call();
-        token_list.value[token_symbol] = {
-          token_decimal,
-          token_name,
-          token_address,
-          isDefault: false,
-        };
+        if (token_list.value[token_symbol] == undefined) {
+          token_list.value[token_symbol] = {
+            token_decimal,
+            token_name,
+            token_address,
+            isDefault: false,
+          };
+        } else {
+          token_error.value = "Token Already Exists";
+        }
         console.log(token_list.value);
       } catch (err) {
         token_error.value = "Wrong Token Entered";
@@ -65,12 +69,16 @@ export default {
         return;
       }
       // check duplicate
-      if (wallet_list.value.includes(wallet_address) === false)
+      if (wallet_list.value.includes(wallet_address) === false) {
         wallet_list.value.push(wallet_address);
+      } else {
+        wallet_error.value = "Address Already Exists";
+      }
       console.log(wallet_list.value);
     };
 
     const removeWallet = function (wallet_address: string): void {
+      wallet_error.value = "";
       if (wallet_address.length <= 0) return;
       wallet_list.value.forEach((value: string, index: any) => {
         if (value == wallet_address) wallet_list.value.splice(index, 1);
@@ -78,6 +86,7 @@ export default {
     };
 
     const removeToken = function (symbol: string): void {
+      token_error.value = "";
       if (symbol == "BNB") return;
       delete token_list.value[symbol];
     };
