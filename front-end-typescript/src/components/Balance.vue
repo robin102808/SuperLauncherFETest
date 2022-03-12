@@ -7,10 +7,10 @@
 </template>
 
 <script lang="ts">
-import { onMounted, onUpdated, ref } from "vue";
+import { onMounted, onUpdated, ref } from 'vue';
 export default {
-  name: "Balance",
-  props: ["token_symbol", "getBalance", "wallet_address"],
+  name: 'Balance',
+  props: ['token_symbol', 'getBalance', 'wallet_address'],
   setup(props: any): any {
     const balance = ref(0);
     const getBalance = async () => {
@@ -20,13 +20,15 @@ export default {
       );
     };
     onMounted(() => {
+      console.log('in mounted');
       getBalance();
     });
     onUpdated(() => {
+      console.log('in updated');
       getBalance();
     });
     return { balance };
-  },
+  }
 };
 </script>
 

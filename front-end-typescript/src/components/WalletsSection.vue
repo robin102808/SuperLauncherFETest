@@ -61,22 +61,22 @@
 </template>
 
 <script lang="ts">
-import Balance from "./Balance.vue";
-import { ref } from "vue";
-import { abi, web3 } from "../helper/helper";
+import Balance from './Balance.vue';
+import { ref } from 'vue';
+import { abi, web3 } from '../helper/helper';
 
 export default {
-  name: "WalletsSection",
-  props: ["removeWallet", "wallet_list", "token_list", "addWallet", "error"],
+  name: 'WalletsSection',
+  props: ['removeWallet', 'wallet_list', 'token_list', 'addWallet', 'error'],
   components: {
-    Balance,
+    Balance
   },
   setup(props: any) {
-    const wallet_input = ref("");
+    const wallet_input = ref('');
 
     const addWalletFromInput = async function () {
       await props.addWallet(wallet_input.value);
-      wallet_input.value = "";
+      wallet_input.value = '';
     };
 
     const getBalance = async function (
@@ -84,12 +84,12 @@ export default {
       wallet_address: string
     ): Promise<string> {
       try {
-        if (token_symbol == "BNB") {
+        if (token_symbol == 'BNB') {
           let bnbBal = await web3.eth.getBalance(wallet_address);
           return parseFloat(await web3.utils.fromWei(bnbBal)).toFixed(3);
         }
         const curr_token = props.token_list[token_symbol];
-        if (!curr_token) return "";
+        if (!curr_token) return '';
         const contract = new web3.eth.Contract(abi, curr_token.token_address);
         const token_balance = await contract.methods
           .balanceOf(wallet_address)
@@ -99,11 +99,11 @@ export default {
         return bal.toFixed(3);
       } catch (err) {
         console.log(err);
-        return "";
+        return '';
       }
     };
     return { wallet_input, addWalletFromInput, getBalance };
-  },
+  }
 };
 </script>
 

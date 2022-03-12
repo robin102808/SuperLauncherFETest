@@ -40,20 +40,20 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
 export default {
-  name: "TokensSection",
-  props: ["removeToken", "token_list", "addToken", "error"],
+  name: 'TokensSection',
+  props: ['removeToken', 'token_list', 'addToken', 'error'],
   setup(props: any) {
-    const token_input = ref("");
+    const token_input = ref('');
 
     const addTokenFromInput = function () {
       props.addToken(token_input.value);
-      token_input.value = "";
+      token_input.value = '';
     };
     return { token_input, addTokenFromInput };
-  },
+  }
 };
 </script>
 
@@ -63,14 +63,14 @@ export default {
 }
 .token {
   min-width: 100px;
-  background-color: lightgray; 
+  background-color: lightgray;
 }
 .delete-btn {
-  background-color: lightgray; 
+  background-color: lightgray;
   border: 0px;
   font-size: 16px;
   font-weight: bold;
   color: #000;
-  float:right;
+  float: right;
 }
 </style>
