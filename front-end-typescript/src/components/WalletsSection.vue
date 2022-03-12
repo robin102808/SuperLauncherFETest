@@ -4,19 +4,17 @@
       <thead>
         <tr>
           <th>
-            <form @submit.prevent>
-              <input
-                placeholder="Enter Wallet Address"
-                v-model="wallet_input"
-                class="item input-field"
-              />
-              <button
-                @click="addWalletFromInput(wallet_input)"
-                class="item add-btn"
-              >
-                Add Wallet
-              </button>
-            </form>
+            <input
+              placeholder="Enter Wallet Address"
+              v-model="wallet_input"
+              class="item input-field"
+            />
+            <button
+              @click="addWalletFromInput(wallet_input)"
+              class="item add-btn"
+            >
+              Add Wallet
+            </button>
           </th>
           <th
             v-for="(token_val, symbol) in token_list"
@@ -124,5 +122,12 @@ export default {
   font-weight: bold;
   color: #000;
   min-width: 30px;
+}
+
+table,
+th,
+td {
+  border-collapse: collapse;
+  padding: 0px !important;
 }
 </style>

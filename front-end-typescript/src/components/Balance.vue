@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <p class="item balance-value">
-      {{ balance }}
-    </p>
-  </div>
+  <p class="item balance-value">
+    {{ balance }}
+  </p>
 </template>
 
 <script lang="ts">

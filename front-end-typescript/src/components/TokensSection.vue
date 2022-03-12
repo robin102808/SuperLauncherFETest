@@ -1,41 +1,35 @@
 <template>
-  <div>
-    <table class="border-bottom">
-      <tbody>
-        <tr>
-          <td>
-            <form @submit.prevent>
-              <input
-                placeholder="Enter Token Address"
-                v-model="token_input"
-                class="item input-field"
-              />
-              <button
-                @click="addTokenFromInput(token_input)"
-                class="item add-btn"
-              >
-                Add Token
-              </button>
-            </form>
-          </td>
-          <td v-for="(token_val, symbol) in token_list" :key="symbol">
-            <div class="item token">
-              {{ symbol }}
-              <button
-                v-show="!token_val.isDefault"
-                @click="removeToken(symbol)"
-                class="delete-btn"
-              >
-                &times;
-              </button>
-            </div>
-          </td>
-        </tr>
-        <tr v-if="error">
-          <div class="error">{{ error }}</div>
-        </tr>
-      </tbody>
-    </table>
+  <div class="border-bottom">
+    <div class="grid-container">
+      <input
+        placeholder="Enter Token Address"
+        v-model="token_input"
+        class="item input-field"
+      />
+      <button @click="addTokenFromInput(token_input)" class="item add-btn">
+        Add Token
+      </button>
+
+      <div
+        class="item token"
+        v-for="(token_val, symbol) in token_list"
+        :key="symbol"
+      >
+        <span>{{ symbol }}</span>
+        <span
+          class="delete-btn"
+          v-show="!token_val.isDefault"
+          @click="removeToken(symbol)"
+        >
+          &times;
+        </span>
+      </div>
+    </div>
+    <div v-if="error" class="error">
+      <br />
+      <span>{{ error }}</span>
+      <br />
+    </div>
   </div>
 </template>
 
@@ -58,8 +52,18 @@ export default {
 </script>
 
 <style scoped>
+.grid-container {
+  display: inline-grid;
+  /* display: grid; */
+  /* display: flex;
+  flex-wrap: wrap; */
+  grid-auto-flow: column;
+}
+
 .border-bottom {
   border-bottom: 2px solid black;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
 }
 .token {
   min-width: 100px;
@@ -72,5 +76,6 @@ export default {
   font-weight: bold;
   color: #000;
   float: right;
+  padding-bottom: 0px;
 }
 </style>
