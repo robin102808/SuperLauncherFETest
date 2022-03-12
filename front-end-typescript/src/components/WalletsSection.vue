@@ -6,18 +6,18 @@
           <th>
             <input
               placeholder="Enter Wallet Address"
-              v-model="wallet_input"
+              v-model="walletInput"
               class="item input-field"
             />
             <button
-              @click="addWalletFromInput(wallet_input)"
+              @click="addWalletFromInput(walletInput)"
               class="item add-btn"
             >
               Add Wallet
             </button>
           </th>
           <th
-            v-for="(token_val, symbol) in token_list"
+            v-for="(tokenVal, symbol) in tokenList"
             :key="symbol"
             :index="symbol"
           >
@@ -28,25 +28,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="error">
-          <div class="error">{{ error }}</div>
+        <tr v-if="walletError">
+          <div class="error">{{ walletError }}</div>
         </tr>
-        <tr v-for="(wallet_address, key, i) in wallet_list" :key="i">
+        <tr v-for="(walletAddress, key, i) in walletList" :key="i">
           <td>
             <div class="item wallet-address">
-              {{ wallet_address }}
+              {{ walletAddress }}
             </div>
           </td>
-          <td v-for="(token_val, symbol) in token_list" :key="symbol">
-            <Balance
-              :token_symbol="symbol"
-              :wallet_address="wallet_address"
+          <td v-for="(tokenVal, symbol) in tokenList" :key="symbol">
+            <BalanceValue
+              :tokenSymbol="symbol"
+              :walletAddress="walletAddress"
               :getBalance="getBalance"
             />
           </td>
           <td>
             <button
-              @click="removeWallet(wallet_address)"
+              @click="removeWallet(walletAddress)"
               class="item delete-wallet"
             >
               &times;
@@ -59,40 +59,46 @@
 </template>
 
 <script lang="ts">
-import Balance from './Balance.vue';
+import BalanceValue from './BalanceValue.vue';
 import { ref } from 'vue';
 import { abi, web3 } from '../helper/helper';
 
 export default {
   name: 'WalletsSection',
-  props: ['removeWallet', 'wallet_list', 'token_list', 'addWallet', 'error'],
+  props: [
+    'removeWallet',
+    'walletList',
+    'tokenList',
+    'addWallet',
+    'walletError'
+  ],
   components: {
-    Balance
+    BalanceValue
   },
   setup(props: any) {
-    const wallet_input = ref('');
+    const walletInput = ref('');
 
     const addWalletFromInput = async function () {
-      await props.addWallet(wallet_input.value);
-      wallet_input.value = '';
+      await props.addWallet(walletInput.value);
+      walletInput.value = '';
     };
 
     const getBalance = async function (
-      token_symbol: string,
-      wallet_address: string
+      tokenSymbol: string,
+      walletAddress: string
     ): Promise<string> {
       try {
-        if (token_symbol == 'BNB') {
-          let bnbBal = await web3.eth.getBalance(wallet_address);
+        if (tokenSymbol == 'BNB') {
+          let bnbBal = await web3.eth.getBalance(walletAddress);
           return parseFloat(await web3.utils.fromWei(bnbBal)).toFixed(3);
         }
-        const curr_token = props.token_list[token_symbol];
-        if (!curr_token) return '';
-        const contract = new web3.eth.Contract(abi, curr_token.token_address);
-        const token_balance = await contract.methods
-          .balanceOf(wallet_address)
+        const currToken = props.tokenList[tokenSymbol];
+        if (!currToken) return '';
+        const contract = new web3.eth.Contract(abi, currToken.tokenAddress);
+        const tokenBalance = await contract.methods
+          .balanceOf(walletAddress)
           .call();
-        const bal = token_balance / Math.pow(10, curr_token.token_decimal);
+        const bal = tokenBalance / Math.pow(10, currToken.tokenDecimal);
         console.log(bal);
         return bal.toFixed(3);
       } catch (err) {
@@ -100,7 +106,7 @@ export default {
         return '';
       }
     };
-    return { wallet_input, addWalletFromInput, getBalance };
+    return { walletInput, addWalletFromInput, getBalance };
   }
 };
 </script>

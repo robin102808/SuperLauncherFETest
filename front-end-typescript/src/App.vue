@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <h1 class="title">Welcome to BSC Wallet Balance Table</h1>
-    <Home />
+    <HomePage />
   </div>
 </template>
 
 <script>
-import Home from './components/Home.vue';
+import HomePage from './pages/HomePage.vue';
 
 export default {
   name: 'App',
   components: {
-    Home
+    HomePage
   }
 };
 </script>

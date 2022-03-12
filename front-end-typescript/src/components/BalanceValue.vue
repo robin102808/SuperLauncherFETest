@@ -8,13 +8,13 @@
 import { onMounted, onUpdated, ref } from 'vue';
 export default {
   name: 'Balance',
-  props: ['token_symbol', 'getBalance', 'wallet_address'],
+  props: ['tokenSymbol', 'getBalance', 'walletAddress'],
   setup(props: any): any {
     const balance = ref(0);
     const getBalance = async () => {
       balance.value = await props.getBalance(
-        props.token_symbol,
-        props.wallet_address
+        props.tokenSymbol,
+        props.walletAddress
       );
     };
     onMounted(() => {

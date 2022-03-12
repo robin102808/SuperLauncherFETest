@@ -3,31 +3,30 @@
     <div class="grid-container">
       <input
         placeholder="Enter Token Address"
-        v-model="token_input"
+        v-model="tokenInput"
         class="item input-field"
       />
-      <button @click="addTokenFromInput(token_input)" class="item add-btn">
+      <button @click="addTokenFromInput(tokenInput)" class="item add-btn">
         Add Token
       </button>
 
       <div
         class="item token"
-        v-for="(token_val, symbol) in token_list"
+        v-for="(tokenVal, symbol) in tokenList"
         :key="symbol"
       >
         <span>{{ symbol }}</span>
         <span
           class="delete-btn"
-          v-show="!token_val.isDefault"
+          v-show="!tokenVal.isDefault"
           @click="removeToken(symbol)"
         >
           &times;
         </span>
       </div>
     </div>
-    <div v-if="error" class="error">
-      <br />
-      <span>{{ error }}</span>
+    <div v-if="tokenError">
+      <span class="error">{{ tokenError }}</span>
       <br />
     </div>
   </div>
@@ -38,15 +37,15 @@ import { ref } from 'vue';
 
 export default {
   name: 'TokensSection',
-  props: ['removeToken', 'token_list', 'addToken', 'error'],
+  props: ['removeToken', 'tokenList', 'addToken', 'tokenError'],
   setup(props: any) {
-    const token_input = ref('');
+    const tokenInput = ref('');
 
     const addTokenFromInput = function () {
-      props.addToken(token_input.value);
-      token_input.value = '';
+      props.addToken(tokenInput.value);
+      tokenInput.value = '';
     };
-    return { token_input, addTokenFromInput };
+    return { tokenInput, addTokenFromInput };
   }
 };
 </script>
