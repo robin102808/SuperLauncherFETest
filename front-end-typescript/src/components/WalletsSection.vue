@@ -58,50 +58,39 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import BalanceValue from './BalanceValue.vue';
 import { ref } from 'vue';
 import { abi, web3 } from '../helper/helper';
 import { token } from '../helper/token';
 import { wallet } from '../helper/wallet';
 
-export default {
-  name: 'WalletsSection',
-  components: {
-    BalanceValue
-  },
-  setup() {
-    const walletInput = ref('');
+const walletInput = ref<string>('');
 
-    const addWalletFromInput = async function () {
-      await wallet.addWallet(walletInput.value);
-      walletInput.value = '';
-    };
+const addWalletFromInput = async function () {
+  await wallet.addWallet(walletInput.value);
+  walletInput.value = '';
+};
 
-    const getBalance = async function (
-      tokenSymbol: string,
-      walletAddress: string
-    ): Promise<string> {
-      try {
-        if (tokenSymbol == 'BNB') {
-          let bnbBal = await web3.eth.getBalance(walletAddress);
-          return parseFloat(await web3.utils.fromWei(bnbBal)).toFixed(3);
-        }
-        const currToken = token.tokenList[tokenSymbol];
-        if (!currToken) return '';
-        const contract = new web3.eth.Contract(abi, currToken.tokenAddress);
-        const tokenBalance = await contract.methods
-          .balanceOf(walletAddress)
-          .call();
-        const bal = tokenBalance / Math.pow(10, currToken.tokenDecimal);
-        console.log(bal);
-        return bal.toFixed(3);
-      } catch (err) {
-        console.log(err);
-        return '';
-      }
-    };
-    return { walletInput, addWalletFromInput, getBalance, wallet, token };
+const getBalance = async function (
+  tokenSymbol: string,
+  walletAddress: string
+): Promise<string> {
+  try {
+    if (tokenSymbol == 'BNB') {
+      let bnbBal = await web3.eth.getBalance(walletAddress);
+      return parseFloat(await web3.utils.fromWei(bnbBal)).toFixed(3);
+    }
+    const currToken = token.tokenList[tokenSymbol];
+    if (!currToken) return '';
+    const contract = new web3.eth.Contract(abi, currToken.tokenAddress);
+    const tokenBalance = await contract.methods.balanceOf(walletAddress).call();
+    const bal = tokenBalance / Math.pow(10, currToken.tokenDecimal);
+    console.log(bal);
+    return bal.toFixed(3);
+  } catch (err) {
+    console.log(err);
+    return '';
   }
 };
 </script>

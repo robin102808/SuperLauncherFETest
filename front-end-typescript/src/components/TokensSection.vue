@@ -25,27 +25,19 @@
         </span>
       </div>
     </div>
-    <div v-if="token.tokenError">
-      <span class="error">{{ token.tokenError }}</span>
-    </div>
+    <div v-if="token.tokenError" class="error">{{ token.tokenError }}</div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue';
 import { token } from '../helper/token';
 
-export default {
-  name: 'TokensSection',
-  setup() {
-    const tokenInput = ref('');
+const tokenInput = ref<string>('');
 
-    const addTokenFromInput = function () {
-      token.addToken(tokenInput.value);
-      tokenInput.value = '';
-    };
-    return { tokenInput, addTokenFromInput, token };
-  }
+const addTokenFromInput = function () {
+  token.addToken(tokenInput.value);
+  tokenInput.value = '';
 };
 </script>
 
