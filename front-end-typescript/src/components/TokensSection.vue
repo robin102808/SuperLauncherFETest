@@ -27,7 +27,6 @@
     </div>
     <div v-if="token.tokenError">
       <span class="error">{{ token.tokenError }}</span>
-      <!-- <br /> -->
     </div>
   </div>
 </template>

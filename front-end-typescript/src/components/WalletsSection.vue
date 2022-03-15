@@ -17,7 +17,7 @@
             </button>
           </th>
           <th
-            v-for="(tokenVal, symbol) in tokenList"
+            v-for="(tokenVal, symbol) in token.tokenList"
             :key="symbol"
             :index="symbol"
           >
@@ -28,16 +28,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="walletError">
-          <div class="error">{{ walletError }}</div>
+        <tr v-if="wallet.walletError">
+          <div class="error">{{ wallet.walletError }}</div>
         </tr>
-        <tr v-for="(walletAddress, key, i) in walletList" :key="i">
+        <tr v-for="(walletAddress, key, i) in wallet.walletList" :key="i">
           <td>
             <div class="item wallet-address">
               {{ walletAddress }}
             </div>
           </td>
-          <td v-for="(tokenVal, symbol) in tokenList" :key="symbol">
+          <td v-for="(tokenVal, symbol) in token.tokenList" :key="symbol">
             <BalanceValue
               :tokenSymbol="symbol"
               :walletAddress="walletAddress"
@@ -46,7 +46,7 @@
           </td>
           <td>
             <button
-              @click="removeWallet(walletAddress)"
+              @click="wallet.removeWallet(walletAddress)"
               class="item delete-wallet"
             >
               &times;
@@ -62,24 +62,19 @@
 import BalanceValue from './BalanceValue.vue';
 import { ref } from 'vue';
 import { abi, web3 } from '../helper/helper';
+import { token } from '../helper/token';
+import { wallet } from '../helper/wallet';
 
 export default {
   name: 'WalletsSection',
-  props: [
-    'removeWallet',
-    'walletList',
-    'tokenList',
-    'addWallet',
-    'walletError'
-  ],
   components: {
     BalanceValue
   },
-  setup(props: any) {
+  setup() {
     const walletInput = ref('');
 
     const addWalletFromInput = async function () {
-      await props.addWallet(walletInput.value);
+      await wallet.addWallet(walletInput.value);
       walletInput.value = '';
     };
 
@@ -92,7 +87,7 @@ export default {
           let bnbBal = await web3.eth.getBalance(walletAddress);
           return parseFloat(await web3.utils.fromWei(bnbBal)).toFixed(3);
         }
-        const currToken = props.tokenList[tokenSymbol];
+        const currToken = token.tokenList[tokenSymbol];
         if (!currToken) return '';
         const contract = new web3.eth.Contract(abi, currToken.tokenAddress);
         const tokenBalance = await contract.methods
@@ -106,7 +101,7 @@ export default {
         return '';
       }
     };
-    return { walletInput, addWalletFromInput, getBalance };
+    return { walletInput, addWalletFromInput, getBalance, wallet, token };
   }
 };
 </script>
