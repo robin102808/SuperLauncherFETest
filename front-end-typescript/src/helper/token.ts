@@ -1,13 +1,6 @@
 import { reactive } from 'vue';
-
-export type Token = {
-  isDefault: boolean;
-  tokenDecimal: number;
-  tokenName: string;
-  tokenAddress: string;
-};
-export type Tokens = Record<string, Token>;
 import { abi, web3 } from './helper';
+import { Tokens, Token } from '../models/Tokens';
 
 export const token = reactive({
   tokenList: {
@@ -35,7 +28,7 @@ export const token = reactive({
           tokenName,
           tokenAddress,
           isDefault: false
-        };
+        } as Token;
       } else {
         this.tokenError = 'Token Already Exists';
       }
@@ -45,6 +38,7 @@ export const token = reactive({
       return;
     }
   },
+
   removeToken(symbol: string): void {
     this.tokenError = '';
     if (symbol == 'BNB') return;
