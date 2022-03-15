@@ -1,15 +1,10 @@
 <template>
   <div>
-    <TokensSection
-      :addToken="addToken"
-      :removeToken="removeToken"
-      :tokenList="tokenList"
-      :tokenError="tokenError"
-    />
+    <TokensSection />
     <WalletsSection
       :addWallet="addWallet"
       :removeWallet="removeWallet"
-      :tokenList="tokenList"
+      :tokenList="token.tokenList"
       :walletList="walletList"
       :walletError="walletError"
     />
@@ -21,6 +16,7 @@ import TokensSection from '../components/TokensSection.vue';
 import WalletsSection from '../components/WalletsSection.vue';
 import { Ref, ref } from 'vue';
 import { abi, web3 } from '../helper/helper';
+import { token } from '../helper/token';
 
 export default {
   name: 'Home',
@@ -29,34 +25,8 @@ export default {
     WalletsSection
   },
   setup(): any {
-    const tokenList: Ref<any> = ref({ BNB: { isDefault: true } });
     const walletList: Ref<any> = ref([]);
-    const tokenError = ref('');
-    const walletError = ref('');
-    const addToken = async function (tokenAddress: string): Promise<void> {
-      tokenError.value = '';
-      if (tokenAddress.length <= 0) return;
-      try {
-        const contract = new web3.eth.Contract(abi, tokenAddress);
-        const tokenSymbol = await contract.methods.symbol().call();
-        const tokenName = await contract.methods.name().call();
-        const tokenDecimal = await contract.methods.decimals().call();
-        if (tokenList.value[tokenSymbol] == undefined) {
-          tokenList.value[tokenSymbol] = {
-            tokenDecimal,
-            tokenName,
-            tokenAddress,
-            isDefault: false
-          };
-        } else {
-          tokenError.value = 'Token Already Exists';
-        }
-        console.log(tokenList.value);
-      } catch (err) {
-        tokenError.value = 'Wrong Token Entered';
-        return;
-      }
-    };
+    const walletError: Ref<string> = ref('');
 
     const addWallet = async function (walletAddress: string): Promise<void> {
       walletError.value = '';
@@ -85,21 +55,12 @@ export default {
       });
     };
 
-    const removeToken = function (symbol: string): void {
-      tokenError.value = '';
-      if (symbol == 'BNB') return;
-      delete tokenList.value[symbol];
-    };
-
     return {
-      tokenList,
       walletList,
-      addToken,
       addWallet,
       removeWallet,
-      removeToken,
-      tokenError,
-      walletError
+      walletError,
+      token
     };
   }
 };
